@@ -46,7 +46,7 @@ SpacePartition::~SpacePartition()
     if(leaf_primitives) delete leaf_primitives;
 }
 
-void SpacePartition::BuildFromList(const list<Primitive*>& primitives)
+void SpacePartition::BuildFromList(const vector<unique_ptr<Primitive>>& primitives)
 {
     vector<PrimBox> primboxes;
     PrimBox primbox;
@@ -55,10 +55,9 @@ void SpacePartition::BuildFromList(const list<Primitive*>& primitives)
     BoundingBox total_box;
     (*(primitives.begin()))->GetBoundingBox(total_box);
 
-    for(list<Primitive*>::const_iterator it = primitives.begin();
-        it != primitives.end(); ++it)
+    for (const auto& prim_ptr: primitives)
     {
-        primbox.prim = *it;
+        primbox.prim = prim_ptr.get();
         primbox.prim->GetBoundingBox(primbox.box);
         primboxes.push_back(primbox);
 

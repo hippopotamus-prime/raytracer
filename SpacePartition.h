@@ -1,11 +1,12 @@
-#ifndef __SPACE_PARTITION__
-#define __SPACE_PARTITION__
+#ifndef SPACE_PARTITION_
+#define SPACE_PARTITION_
 
 // Nicer way of storing primitives than in a flat list.
 // Implemented with a K-D Tree.
 
-#include <list>
 #include <vector>
+#include <memory>
+#include <list>
 #include "Primitive.h"
 #include "BoundingBox.h"
 #include "VectorMath.h"
@@ -22,7 +23,7 @@ class SpacePartition
         SpacePartition(int _axis = 0);
         ~SpacePartition();
 
-        void BuildFromList(const std::list<Primitive*>& primitives);
+        void BuildFromList(const std::vector<std::unique_ptr<Primitive>>& primitives);
         double TraceRay(const Point& src, const Vector& ray, double hither,
                         Primitive*& object, Vector& normal);
 

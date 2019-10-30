@@ -25,46 +25,22 @@ Scene::Scene()
 }
 
 
-Scene::~Scene()
-{
-    for(list<Primitive*>::iterator it = primitives.begin();
-    it != primitives.end(); ++it)
-    {
-        delete *it;
-    }
-
-    for(list<Light*>::iterator it = lights.begin();
-    it != lights.end(); ++it)
-    {
-        delete *it;
-    }
-
-    for(list<Surface*>::iterator it = surfaces.begin();
-    it != surfaces.end(); ++it)
-    {
-        delete *it;
-    }
-
-    if(space_partition) delete space_partition;
-}
-
-
 void Scene::AddSurface(Surface* surface)
 {
-    surfaces.push_back(surface);
+    _surfaces.push_back(unique_ptr<Surface>(surface));
 }
 
 
 void Scene::AddPrimitive(Primitive* primitive)
 {
-    primitive->SetSurface(surfaces.back());
-    primitives.push_back(primitive);
+    primitive->SetSurface(_surfaces.back().get());
+    _primitives.push_back(unique_ptr<Primitive>(primitive));
 }
 
 
 void Scene::AddLight(Light* light)
 {
-    lights.push_back(light);
+    _lights.push_back(unique_ptr<Light>(light));
 }
 
 
@@ -83,22 +59,22 @@ void Scene::Prepare()
     side.Normalize();
 
     // Normalize light intensities
-    if(!lights.empty())
+    if (!_lights.empty())
     {
-        double light_scale = sqrt((double) lights.size());
+        double light_scale = sqrt((double) _lights.size());
 
-        for(list<Light*>::iterator it = lights.begin(); it != lights.end(); ++it)
+        for (auto& light_ptr: _lights)
         {
-            (*it)->color.r /= light_scale;
-            (*it)->color.g /= light_scale;
-            (*it)->color.b /= light_scale;
+            light_ptr->color.r /= light_scale;
+            light_ptr->color.g /= light_scale;
+            light_ptr->color.b /= light_scale;
         }
     }
 
     // Space partition, GO!
 
-    space_partition = new SpacePartition();
-    space_partition->BuildFromList(primitives);
+    _space_partition.reset(new SpacePartition());
+    _space_partition->BuildFromList(_primitives);
 }
 
 
@@ -193,12 +169,11 @@ double hither, RGB& color, int depth, double contribution)
 
         Surface* surface = object->GetSurface();
 
-        for(list<Light*>::iterator it = lights.begin();
-        it != lights.end(); ++it)
+        for (const auto& light_ptr: _lights)
         {
-            light_ray.x = (*it)->location.x - intersection.x;
-            light_ray.y = (*it)->location.y - intersection.y;
-            light_ray.z = (*it)->location.z - intersection.z;
+            light_ray.x = light_ptr->location.x - intersection.x;
+            light_ray.y = light_ptr->location.y - intersection.y;
+            light_ray.z = light_ptr->location.z - intersection.z;
 
             if(Dot(light_ray, object_normal) > 0)
             {
@@ -209,7 +184,7 @@ double hither, RGB& color, int depth, double contribution)
                 if((obscure_distance > lrmag) || (obscure_distance < 0))
                 {
                     surface->AddColor(object_normal, ray, reflection, light_ray,
-                        (*it)->color, local_color);
+                        light_ptr->color, local_color);
                 }
             }
         }
@@ -294,7 +269,7 @@ double Scene::TraceRay(const Point& src, const Vector& ray)
 double Scene::TraceRay(const Point& src, const Vector& ray,
                        double hither, Primitive*& object, Vector& normal)
 {
-    double min = space_partition->TraceRay(src, ray, hither, object, normal);
+    double min = _space_partition->TraceRay(src, ray, hither, object, normal);
 
     /*
     bool intersected = false;

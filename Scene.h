@@ -1,7 +1,8 @@
-#ifndef __SCENE__
-#define __SCENE__
+#ifndef SCENE_
+#define SCENE_
 
-#include <list>
+#include <vector>
+#include <memory>
 #include "Primitive.h"
 #include "VectorMath.h"
 #include "Surface.h"
@@ -29,7 +30,6 @@ class Scene
             {return ((double) width / (double) height);}
 
         Scene();
-        ~Scene();
 
         RGB     background;
         Point   from;
@@ -49,10 +49,10 @@ class Scene
 
         Vector  forward;
         Vector  side;
-        std::list<Primitive*>   primitives;
-        std::list<Light*>       lights;
-        std::list<Surface*>     surfaces;
-        SpacePartition*         space_partition;
+        std::vector<std::unique_ptr<Primitive>> _primitives;
+        std::vector<std::unique_ptr<Light>> _lights;
+        std::vector<std::unique_ptr<Surface>> _surfaces;
+        std::unique_ptr<SpacePartition> _space_partition;
 };
 
 #endif
