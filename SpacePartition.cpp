@@ -74,8 +74,6 @@ void SpacePartition::BuildFromList(const vector<PrimBox>& primitives)
         vector<PrimBox> over_primitives;
         vector<PrimBox> under_primitives;
 
-        PrimBox primbox;
-
         for (const auto& primbox: primitives)
         {
             // TODO - using bounding boxes like this is not optimal.  Instead,
@@ -348,7 +346,7 @@ size_t SpacePartition::GetSize() const noexcept
     {
         return std::get<LeafChildren>(_children).primitives.size();
     }
-    else if (std::holds_alternative<NonLeafChildren>(_children))
+    else
     {
         const auto& non_leaf = std::get<NonLeafChildren>(_children);
         return non_leaf.over->GetSize() + non_leaf.under->GetSize();

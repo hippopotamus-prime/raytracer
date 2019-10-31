@@ -3,7 +3,7 @@ project(raytracer)
 
 file(GLOB SOURCES *.cpp)
 
-set(CMAKE_CXX_FLAGS "-std=c++17")
+set(CMAKE_CXX_FLAGS "-std=c++17 -Wall -Wextra -Wno-unused-parameter")
 add_executable(raytracer ${SOURCES})
 
 install(TARGETS raytracer DESTINATION bin)
