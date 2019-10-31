@@ -6,7 +6,7 @@ Primitive::Primitive() : mark(false)
     //no code
 }
 
-Surface* Primitive::GetSurface()
+const Surface* Primitive::GetSurface() const
 {
     return surface;
 }

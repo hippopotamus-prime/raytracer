@@ -13,7 +13,7 @@ ks(_ks), kd(_kd), shine(_shine)
 
 void BlinnPhong::AddColor(const Vector& normal, const Vector& view,
     const Vector& reflection, const Vector& light_ray, const RGB& light_color,
-    RGB& local_color)
+    RGB& local_color) const
 {
     double intensity = GetSpecularIntensity(normal, view, reflection, light_ray);
     double diffuse_factor = Dot(light_ray, normal);
@@ -25,7 +25,7 @@ void BlinnPhong::AddColor(const Vector& normal, const Vector& view,
 
 
 double BlinnPhong::GetSpecularIntensity(const Vector& normal, const Vector& view,
-    const Vector& reflection, const Vector& light_ray)
+    const Vector& reflection, const Vector& light_ray) const
 {
     Vector half = view + light_ray;
     half.Normalize();

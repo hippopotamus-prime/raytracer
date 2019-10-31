@@ -13,7 +13,7 @@ ks(_ks), kd(_kd), shine(_shine)
 
 void Phong::AddColor(const Vector& normal, const Vector& view,
     const Vector& reflection, const Vector& light_ray, const RGB& light_color,
-    RGB& local_color)
+    RGB& local_color) const
 {
     double intensity = GetSpecularIntensity(normal, view, reflection, light_ray);
     double diffuse_factor = Dot(light_ray, normal);
@@ -25,7 +25,7 @@ void Phong::AddColor(const Vector& normal, const Vector& view,
 
 
 double Phong::GetSpecularIntensity(const Vector& normal, const Vector& view,
-    const Vector& reflection, const Vector& light_ray)
+    const Vector& reflection, const Vector& light_ray) const
 {
     double intensity = 0;
     double specular_factor = Dot(reflection, light_ray);

@@ -78,7 +78,7 @@ void Scene::Prepare()
 }
 
 
-void Scene::Render(unsigned char* output)
+void Scene::Render(unsigned char* output) const
 {
     //All the rays can be thought of as passing through a
     //rectangle that is <near> away from the eye, with dimensions
@@ -93,12 +93,12 @@ void Scene::Render(unsigned char* output)
     Vector ray;
     RGB color;
 
-    for(unsigned int j = 0; j < height; ++j)
+    for (unsigned int j = 0; j < height; ++j)
     {
         sy = 1 - 2 * (double) j / (double) height - 1 / (double) height;
         cout << "Rendering line " << j << "." << endl;
 
-        for(unsigned int i = 0; i < width; ++i)
+        for (unsigned int i = 0; i < width; ++i)
         {
             sx = 2 * (double) i / (double) width + 1 / (double) width - 1;
 
@@ -122,9 +122,9 @@ void Scene::Render(unsigned char* output)
 
 
 void Scene::TracePrimaryRay(const Point& src, const Vector& ray,
-double hither, RGB& color, int depth, double contribution)
+    double hither, RGB& color, int depth, double contribution) const
 {
-    Primitive* object = NULL;
+    const Primitive* object = nullptr;
     Vector object_normal;
 
     double distance = TraceRay(src, ray, hither, object, object_normal);
@@ -134,7 +134,7 @@ double hither, RGB& color, int depth, double contribution)
     local_color.g = 0;
     local_color.b = 0;
 
-    if((distance >= hither) && (object != NULL))
+    if ((distance >= hither) && object)
     {
         Point intersection;
         intersection.x = src.x + distance * ray.x;
@@ -144,7 +144,7 @@ double hither, RGB& color, int depth, double contribution)
         double ndr = Dot(object_normal, ray);
         bool back_face = false;
 
-        if(ndr > 0)
+        if (ndr > 0)
         {
             //We hit the back face...  we'll treat stuff as
             //being double sided, so we'll just flip the normal
@@ -167,7 +167,7 @@ double hither, RGB& color, int depth, double contribution)
         double lrmag;
         double obscure_distance;
 
-        Surface* surface = object->GetSurface();
+        const Surface* surface = object->GetSurface();
 
         for (const auto& light_ptr: _lights)
         {
@@ -175,7 +175,7 @@ double hither, RGB& color, int depth, double contribution)
             light_ray.y = light_ptr->location.y - intersection.y;
             light_ray.z = light_ptr->location.z - intersection.z;
 
-            if(Dot(light_ray, object_normal) > 0)
+            if (Dot(light_ray, object_normal) > 0)
             {
                 lrmag = light_ray.Normalize();
 
@@ -192,9 +192,9 @@ double hither, RGB& color, int depth, double contribution)
         RGB reflection_color = background;
         RGB refraction_color = background;
 
-        if(depth < MAX_DEPTH)
+        if (depth < MAX_DEPTH)
         {
-            if(surface->reflectance * contribution > MIN_CONTRIBUTION)
+            if (surface->reflectance * contribution > MIN_CONTRIBUTION)
             {
                 TracePrimaryRay(intersection, reflection,
                     0.0001, reflection_color, depth + 1,
@@ -206,7 +206,7 @@ double hither, RGB& color, int depth, double contribution)
             //to be leaving a solid material, and so uses the inverse
             //of the index of refraction.
 
-            if(surface->transmittance * contribution > MIN_CONTRIBUTION)
+            if (surface->transmittance * contribution > MIN_CONTRIBUTION)
             {
                 double refraction_index = surface->refraction;
 
@@ -217,7 +217,7 @@ double hither, RGB& color, int depth, double contribution)
 
                 double a = 1 - ((1 - ndr * ndr) / (refraction_index * refraction_index));
 
-                if(a >= 0)
+                if (a >= 0)
                 {
                     Vector refraction_ray;
 
@@ -257,9 +257,9 @@ double hither, RGB& color, int depth, double contribution)
 }
 
 
-double Scene::TraceRay(const Point& src, const Vector& ray)
+double Scene::TraceRay(const Point& src, const Vector& ray) const
 {
-    Primitive* object;
+    const Primitive* object;
     Vector normal;
 
     return TraceRay(src, ray, 0.0001, object, normal);
@@ -267,7 +267,7 @@ double Scene::TraceRay(const Point& src, const Vector& ray)
 
 
 double Scene::TraceRay(const Point& src, const Vector& ray,
-                       double hither, Primitive*& object, Vector& normal)
+    double hither, const Primitive*& object, Vector& normal) const
 {
     double min = _space_partition->TraceRay(src, ray, hither, object, normal);
 

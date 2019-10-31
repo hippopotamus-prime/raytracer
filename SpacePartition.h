@@ -25,7 +25,7 @@ class SpacePartition
 
         void BuildFromList(const std::vector<std::unique_ptr<Primitive>>& primitives);
         double TraceRay(const Point& src, const Vector& ray, double hither,
-                        Primitive*& object, Vector& normal);
+                        const Primitive*& object, Vector& normal) const;
 
         size_t GetSize();
         void MarkPrimitives();

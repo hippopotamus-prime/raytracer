@@ -13,7 +13,7 @@ k(_k)
 
 void Minnaert::AddColor(const Vector& normal, const Vector& view,
     const Vector& reflection, const Vector& light_ray, const RGB& light_color,
-    RGB& local_color)
+    RGB& local_color) const
 {
     double intensity = GetIntensity(normal, view, reflection, light_ray);
 
@@ -24,7 +24,7 @@ void Minnaert::AddColor(const Vector& normal, const Vector& view,
 
 
 double Minnaert::GetIntensity(const Vector& normal, const Vector& view,
-    const Vector& reflection, const Vector& light_ray)
+    const Vector& reflection, const Vector& light_ray) const
 {
     double a = pow(Dot(normal, light_ray), k);
     double b = pow(-Dot(normal, view), k - 1);

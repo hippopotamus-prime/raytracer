@@ -388,36 +388,36 @@ size_t SpacePartition::GetSize()
 }
 
 
-double SpacePartition::TraceRay(const Point& src, const Vector& ray, double hither,
-                                Primitive*& object, Vector& normal)
+double SpacePartition::TraceRay(
+    const Point& src, const Vector& ray, double hither,
+    const Primitive*& object, Vector& normal) const
 {
     double result = -1.0;
 
     // Does the ray hit the bounding box for this partition?
 
-    if(bounding_box.IntersectRay(src, ray, hither))
+    if (bounding_box.IntersectRay(src, ray, hither))
     {
         // If this is a leaf, intersect all the prmitives
 
-        if(leaf_primitives)
+        if (leaf_primitives)
         {
             bool intersected = false;
             double distance;
             double min = -1;
             Vector temp_normal;
 
-            for(list<Primitive*>::iterator it = leaf_primitives->begin();
-                it != leaf_primitives->end(); ++it)
+            for (const auto& prim_ptr: *leaf_primitives)
             {
-                distance = (*it)->IntersectRay(src, ray, hither, temp_normal);
+                distance = prim_ptr->IntersectRay(src, ray, hither, temp_normal);
 
-                if(distance >= hither)
+                if (distance >= hither)
                 {
-                    if(!intersected || (distance < min))
+                    if (!intersected || (distance < min))
                     {
                         intersected = true;
                         min = distance;
-                        object = *it;
+                        object = prim_ptr;
                         normal = temp_normal;
                     }
                 }
@@ -431,7 +431,7 @@ double SpacePartition::TraceRay(const Point& src, const Vector& ray, double hith
             // First one is chosen based on which side of the splitting
             // plane the ray starts on.
 
-            if(src.GetValue(axis) < splitting_plane)
+            if (src.GetValue(axis) < splitting_plane)
             {
                 result = under->TraceRay(src, ray, hither, object, normal);
                 // Need to check the other side of the partition in two cases:
@@ -441,8 +441,8 @@ double SpacePartition::TraceRay(const Point& src, const Vector& ray, double hith
                 //   in this case we can't say whether or not the found
                 //   intersection is actually the closest one
 
-                if((result < hither)
-                || ((src + ray * result).GetValue(axis) > splitting_plane))
+                if ((result < hither)
+                ||  ((src + ray * result).GetValue(axis) > splitting_plane))
                 {
                     result = over->TraceRay(src, ray, hither, object, normal);
                 }
@@ -451,8 +451,8 @@ double SpacePartition::TraceRay(const Point& src, const Vector& ray, double hith
             {
                 result = over->TraceRay(src, ray, hither, object, normal);
 
-                if((result < hither)
-                || ((src + ray * result).GetValue(axis) < splitting_plane))
+                if ((result < hither)
+                ||  ((src + ray * result).GetValue(axis) < splitting_plane))
                 {
                     result = under->TraceRay(src, ray, hither, object, normal);
                 }

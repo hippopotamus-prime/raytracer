@@ -23,7 +23,7 @@ class Scene
         Scene();
 
         void Prepare();
-        void Render(unsigned char* output);
+        void Render(unsigned char* output) const;
         void AddPrimitive(Primitive* primitive);
         void AddLight(Light* light);
         void AddSurface(Surface* surface);
@@ -41,11 +41,11 @@ class Scene
         unsigned int height;
 
     private:
-        double TraceRay(const Point& src, const Vector& ray);
+        double TraceRay(const Point& src, const Vector& ray) const;
         double TraceRay(const Point& src, const Vector& ray,
-            double hither, Primitive*& object, Vector& normal);
+            double hither, const Primitive*& object, Vector& normal) const;
         void TracePrimaryRay(const Point& src, const Vector& ray,
-            double hither, RGB& color, int depth, double contribution);
+            double hither, RGB& color, int depth, double contribution) const;
 
         Vector  forward;
         Vector  side;

@@ -1,5 +1,5 @@
-#ifndef __PRIMITIVE__
-#define __PRIMITIVE__
+#ifndef PRIMITIVE_
+#define PRIMITIVE_
 
 #include "VectorMath.h"
 #include "Surface.h"
@@ -9,9 +9,9 @@ class Primitive
 {
     public:
         Primitive();
-        virtual ~Primitive() {}     //needed to prevent compiler warnings.  lame.
+        virtual ~Primitive() = default;
 
-        Surface* GetSurface();
+        const Surface* GetSurface() const;
         void SetSurface(Surface* _surface);
 
         virtual double IntersectRay(const Point& src, const Vector& ray,
