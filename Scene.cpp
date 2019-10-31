@@ -18,10 +18,12 @@ location(_location), color(_color)
     //no code
 }
 
-Scene::Scene()
+Scene::Scene() :
+    _space_partition(new SpacePartition())
 {
-    //Default surface is white and perfectly diffuse
-    AddSurface(new Phong(1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0));
+    // Default surface is white and perfectly diffuse
+    _surfaces.push_back(
+        make_unique<Phong>(1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0));
 }
 
 
@@ -72,8 +74,6 @@ void Scene::Prepare()
     }
 
     // Space partition, GO!
-
-    _space_partition.reset(new SpacePartition());
     _space_partition->BuildFromList(_primitives);
 }
 
