@@ -42,3 +42,6 @@ build
 
 # Editor configuration
 .vscode
+
+# Image output
+*.ppm
