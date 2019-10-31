@@ -20,16 +20,16 @@ class Light
 class Scene
 {
     public:
+        Scene();
+
         void Prepare();
         void Render(unsigned char* output);
         void AddPrimitive(Primitive* primitive);
         void AddLight(Light* light);
         void AddSurface(Surface* surface);
 
-        double GetAspectRatio()
+        double GetAspectRatio() const noexcept
             {return ((double) width / (double) height);}
-
-        Scene();
 
         RGB     background;
         Point   from;
