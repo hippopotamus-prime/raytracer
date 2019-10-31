@@ -12,7 +12,7 @@ Primitive(), v1(_v1), v2(_v2), v3(_v3)
 }
 
 
-void Triangle::GetBoundingBox(BoundingBox& box)
+void Triangle::GetBoundingBox(BoundingBox& box) const
 {
     float min_x = v1.x;
     if(v2.x < min_x) min_x = v2.x;
@@ -47,23 +47,23 @@ void Triangle::GetBoundingBox(BoundingBox& box)
 }
 
 double Triangle::IntersectRay(const Point& src, const Vector& ray,
-double near, Vector& point_normal)
+    double near, Vector& point_normal) const
 {
     double result = -1;
 
     double num = Dot(Vector(src, v1), n);
     double den = Dot(ray, n);
 
-    if(fabs(den) >= 0.0001)
+    if (fabs(den) >= 0.0001)
     {
         double alpha = num / den;
 
-        if(alpha >= near)
+        if (alpha >= near)
         {
             double scale1, scale2, scale3;
         
-            if((fabs(n.z) > fabs(n.x))
-            && (fabs(n.z) > fabs(n.y)))
+            if ((fabs(n.z) > fabs(n.x))
+            &&  (fabs(n.z) > fabs(n.y)))
             {
                 double px = src.x + alpha * ray.x - v3.x;
                 double py = src.y + alpha * ray.y - v3.y;
@@ -75,7 +75,7 @@ double near, Vector& point_normal)
                 scale2 = (py * u1x - px * u1y) / (u2y * u1x - u2x * u1y);
                 scale1 = (py * u2x - px * u2y) / (u1y * u2x - u1x * u2y);
             }
-            else if(fabs(n.y) > fabs(n.x))
+            else if (fabs(n.y) > fabs(n.x))
             {
                 double px = src.x + alpha * ray.x - v3.x;
                 double pz = src.z + alpha * ray.z - v3.z;
@@ -102,9 +102,9 @@ double near, Vector& point_normal)
         
             scale3 = 1 - scale1 - scale2;
         
-            if((scale1 <= 1) && (scale1 >= 0)
-            && (scale2 <= 1) && (scale2 >= 0)
-            && (scale3 <= 1) && (scale3 >= 0))
+            if ((scale1 <= 1) && (scale1 >= 0)
+            &&  (scale2 <= 1) && (scale2 >= 0)
+            &&  (scale3 <= 1) && (scale3 >= 0))
             {
                 result = alpha;
                 point_normal = n;

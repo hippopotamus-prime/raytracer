@@ -11,7 +11,7 @@ base(_base), br(_br), apex(_apex), ar(_ar)
 }
 
 
-void Cone::GetBoundingBox(BoundingBox& box)
+void Cone::GetBoundingBox(BoundingBox& box) const
 {
     // This is somewhat of an over-estimate :/
     // TODO - figure out an exact boundary
@@ -44,7 +44,7 @@ void Cone::GetBoundingBox(BoundingBox& box)
 
 
 double Cone::IntersectRay(const Point& src, const Vector& ray,
-double near, Vector& point_normal)
+double near, Vector& point_normal) const
 {
     double result = -1;
 

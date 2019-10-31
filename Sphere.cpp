@@ -10,7 +10,7 @@ center(point), radius(fabs(_radius))
 }
 
 
-void Sphere::GetBoundingBox(BoundingBox& box)
+void Sphere::GetBoundingBox(BoundingBox& box) const
 {
     box.SetMinX(center.x - radius);
     box.SetMinY(center.y - radius);
@@ -23,7 +23,7 @@ void Sphere::GetBoundingBox(BoundingBox& box)
 
 
 double Sphere::IntersectRay(const Point& src, const Vector& ray,
-double near, Vector& point_normal)
+    double near, Vector& point_normal) const
 {
     //Finds a solution to the equations:
     //  p = src + t * ray           (ray equation)
@@ -41,7 +41,7 @@ double near, Vector& point_normal)
 
     double d = b * b - 4 * a * c;
 
-    if(d >= 0)
+    if (d >= 0)
     {
         double e = sqrt(d);
 
@@ -50,12 +50,12 @@ double near, Vector& point_normal)
         //not be valid...
         double f = (-b - e) / (2 * a);
 
-        if(f < near)
+        if (f < near)
         {
             f = (-b + e) / (2 * a);
         }
 
-        if(f >= near)
+        if (f >= near)
         {
             result = f;
 

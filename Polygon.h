@@ -1,5 +1,5 @@
-#ifndef __POLYGON__
-#define __POLYGON__
+#ifndef POLYGON_
+#define POLYGON_
 
 #include <vector>
 #include "Primitive.h"
@@ -13,9 +13,9 @@ class Polygon : public Primitive
         Polygon(const std::vector<Point>& _points,
                 const std::vector<Vector>& _normals);
 
-        virtual double IntersectRay(const Point& src, const Vector& ray,
-            double near, Vector& point_normal);
-        virtual void GetBoundingBox(BoundingBox& box);
+        double IntersectRay(const Point& src, const Vector& ray,
+            double near, Vector& point_normal) const override;
+        void GetBoundingBox(BoundingBox& box) const override;
 
     private:
         std::vector<Point> points;

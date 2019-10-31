@@ -1,5 +1,5 @@
-#ifndef __DISK__
-#define __DISK__
+#ifndef DISK_
+#define DISK_
 
 #include "Primitive.h"
 #include "VectorMath.h"
@@ -10,9 +10,9 @@ class Disk : public Primitive
     public:
         Disk(const Point& _center, const Vector& _normal,
             const Vector& _arm, double _radius, double theta_max);
-        virtual double IntersectRay(const Point& src, const Vector& ray,
-            double near, Vector& point_normal);
-        virtual void GetBoundingBox(BoundingBox& box);
+        double IntersectRay(const Point& src, const Vector& ray,
+            double near, Vector& point_normal) const override;
+        void GetBoundingBox(BoundingBox& box) const override;
 
     private:
         Point center;

@@ -15,9 +15,9 @@ class Primitive
         void SetSurface(Surface* _surface);
 
         virtual double IntersectRay(const Point& src, const Vector& ray,
-            double near, Vector& point_normal) = 0;
+            double near, Vector& point_normal) const = 0;
 
-        virtual void GetBoundingBox(BoundingBox& box) = 0;
+        virtual void GetBoundingBox(BoundingBox& box) const = 0;
 
         void SetMark(bool _mark) {mark = _mark;}
         bool GetMark() {return mark;}

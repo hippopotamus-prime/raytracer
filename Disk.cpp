@@ -21,7 +21,7 @@ sin_theta(sin(ToRadians(theta_max)))
 }
 
 
-void Disk::GetBoundingBox(BoundingBox& box)
+void Disk::GetBoundingBox(BoundingBox& box) const
 {
     // This is an overestimate - it doesn't consider the angle parameter.
 
@@ -46,18 +46,18 @@ void Disk::GetBoundingBox(BoundingBox& box)
 
 
 double Disk::IntersectRay(const Point& src, const Vector& ray,
-double near, Vector& point_normal)
+    double near, Vector& point_normal) const
 {
     double result = -1;
 
     double num = Dot(Vector(src, center), normal);
     double den = Dot(ray, normal);
 
-    if(fabs(den) >= 0.0001)
+    if (fabs(den) >= 0.0001)
     {
         double alpha = num / den;
 
-        if(alpha >= near)
+        if (alpha >= near)
         {
             Point p;
             p.x = src.x + alpha * ray.x;
@@ -66,7 +66,7 @@ double near, Vector& point_normal)
 
             Vector v(center, p);
 
-            if(v.x * v.x + v.y * v.y + v.z * v.z <= radius * radius)
+            if (v.x * v.x + v.y * v.y + v.z * v.z <= radius * radius)
             {
                 v.Normalize();
                 Vector c;
@@ -75,10 +75,10 @@ double near, Vector& point_normal)
                 double vcos = Dot(v, arm);
                 double vsin = Dot(c, normal);
 
-                if(sin_theta > 0)
+                if (sin_theta > 0)
                 {
-                    if((vsin >= 0)
-                    && (vcos >= cos_theta))
+                    if ((vsin >= 0)
+                    &&  (vcos >= cos_theta))
                     {
                         result = alpha;
                         point_normal = normal;
@@ -86,8 +86,8 @@ double near, Vector& point_normal)
                 }
                 else
                 {
-                    if((vsin >= 0)
-                    || (vcos <= cos_theta))
+                    if ((vsin >= 0)
+                    ||  (vcos <= cos_theta))
                     {
                         result = alpha;
                         point_normal = normal;

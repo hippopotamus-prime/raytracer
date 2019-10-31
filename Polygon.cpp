@@ -25,7 +25,7 @@ points(_points)
 }
 
 
-void Polygon::GetBoundingBox(BoundingBox& box)
+void Polygon::GetBoundingBox(BoundingBox& box) const
 {
     float min_x = points[0].x;
     float max_x = points[0].x;
@@ -34,14 +34,14 @@ void Polygon::GetBoundingBox(BoundingBox& box)
     float min_z = points[0].z;
     float max_z = points[0].z;
 
-    for(unsigned int i = 1; i < points.size(); ++i)
+    for (const auto& point: points)
     {
-        if(points[i].x < min_x) min_x = points[i].x;
-        if(points[i].x > max_x) max_x = points[i].x;
-        if(points[i].y < min_y) min_y = points[i].y;
-        if(points[i].y > max_y) max_y = points[i].y;
-        if(points[i].z < min_z) min_z = points[i].z;
-        if(points[i].z > max_z) max_z = points[i].z;
+        if (point.x < min_x) min_x = point.x;
+        if (point.x > max_x) max_x = point.x;
+        if (point.y < min_y) min_y = point.y;
+        if (point.y > max_y) max_y = point.y;
+        if (point.z < min_z) min_z = point.z;
+        if (point.z > max_z) max_z = point.z;
     }
 
     box.SetMinX(min_x);
@@ -54,7 +54,7 @@ void Polygon::GetBoundingBox(BoundingBox& box)
 
 
 double Polygon::IntersectRay(const Point& src, const Vector& ray,
-    double near, Vector& point_normal)
+    double near, Vector& point_normal) const
 {
     double result = -1;
 
@@ -65,11 +65,11 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
     double num = Dot(Vector(src, points[0]), normal);
     double den = Dot(ray, normal);
 
-    if(fabs(den) >= 0.0001)
+    if (fabs(den) >= 0.0001)
     {
         double alpha = num / den;
 
-        if(alpha >= near)
+        if (alpha >= near)
         {
             Point p;
             p.x = src.x + alpha * ray.x;
@@ -97,8 +97,8 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
             unsigned int front_index = 0;
             unsigned int back_index = 0;
 
-            if((fabs(normal.z) > fabs(normal.x))
-            && (fabs(normal.z) > fabs(normal.y)))
+            if ((fabs(normal.z) > fabs(normal.x))
+            &&  (fabs(normal.z) > fabs(normal.y)))
             {
                 //So, in this case we're in the x-y plane.  To calculate
                 //the edge intersections, we'll use something similar to
@@ -111,7 +111,7 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
                 //This becomes very easy to solve if we send the ray along
                 //either the x or y axis.  We'll use x.
 
-                for(unsigned int i = 0; i < points.size(); ++i)
+                for (unsigned int i = 0; i < points.size(); ++i)
                 {
                     a = points[i];
                     b = points[(i + 1) % points.size()];
@@ -150,9 +150,9 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
                     }
                 }
             }
-            else if(fabs(normal.y) > fabs(normal.x))
+            else if (fabs(normal.y) > fabs(normal.x))
             {
-                for(unsigned int i = 0; i < points.size(); ++i)
+                for (unsigned int i = 0; i < points.size(); ++i)
                 {
                     a = points[i];
                     b = points[(i + 1) % points.size()];
@@ -193,12 +193,12 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
             }
             else
             {
-                for(unsigned int i = 0; i < points.size(); ++i)
+                for (unsigned int i = 0; i < points.size(); ++i)
                 {
                     a = points[i];
                     b = points[(i + 1) % points.size()];
 
-                    if(fabs(a.z - b.z) > 0.0001)
+                    if (fabs(a.z - b.z) > 0.0001)
                     {
                         scale = (p.z - b.z) / (a.z - b.z);
 
@@ -233,16 +233,16 @@ double Polygon::IntersectRay(const Point& src, const Vector& ray,
                 }
             }
 
-            if(intersections & 1)
+            if (intersections & 1)
             {
                 result = alpha;
                 unsigned int n = normals.size();
 
-                if(n < points.size())
+                if (n < points.size())
                 {
                     point_normal = normal;
                 }
-                else if(hit_back && hit_front)
+                else if (hit_back && hit_front)
                 {
                     //Bilinear interpolation - when checking for edge intersections,
                     //we recorded the closest edges in front of and behind the
