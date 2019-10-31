@@ -19,12 +19,8 @@ class Primitive
 
         virtual void GetBoundingBox(BoundingBox& box) const = 0;
 
-        void SetMark(bool _mark) {mark = _mark;}
-        bool GetMark() {return mark;}
-
     private:
         Surface* surface;
-        bool mark;          // delete this
 };
 
 #endif

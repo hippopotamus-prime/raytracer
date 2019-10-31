@@ -357,24 +357,6 @@ bool SpacePartition::IsUnderBoundary(const PrimBox& primbox)
 }
 
 
-void SpacePartition::MarkPrimitives()
-{
-    if(leaf_primitives)
-    {
-        for(list<Primitive*>::iterator it = leaf_primitives->begin();
-            it != leaf_primitives->end(); ++it)
-        {
-            (*it)->SetMark(true);
-        }
-    }
-    else
-    {
-        over->MarkPrimitives();
-        under->MarkPrimitives();
-    }
-}
-
-
 size_t SpacePartition::GetSize()
 {
     if(leaf_primitives)

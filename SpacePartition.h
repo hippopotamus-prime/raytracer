@@ -28,7 +28,6 @@ class SpacePartition
                         const Primitive*& object, Vector& normal) const;
 
         size_t GetSize();
-        void MarkPrimitives();
 
     protected:
         void BuildFromList(const std::vector<PrimBox>& primitives,

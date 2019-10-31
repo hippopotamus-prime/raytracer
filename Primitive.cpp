@@ -1,7 +1,7 @@
 #include "Primitive.h"
 #include "VectorMath.h"
 
-Primitive::Primitive() : mark(false)
+Primitive::Primitive()
 {
     //no code
 }
