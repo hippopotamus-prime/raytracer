@@ -1,5 +1,5 @@
-#ifndef __VECTORMATH__
-#define __VECTORMATH__
+#ifndef VECTORMATH_
+#define VECTORMATH_
 
 class RGB
 {
