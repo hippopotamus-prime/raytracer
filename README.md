@@ -15,3 +15,9 @@ Input is from stdin. Output is to a file named *trace.ppm* in the current direct
 ```
 ./raytracer < nff/teapot.nff
 ```
+
+## Example Output
+![Balls](https://i.imgur.com/NtuQIvf.png)
+![Lattice](https://i.imgur.com/UO0MUkQ.png)
+![Teapot](https://i.imgur.com/PMY53KS.png)
+![Gears](https://i.imgur.com/xk72Dmh.png)
